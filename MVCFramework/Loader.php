@@ -36,7 +36,7 @@ final class Loader
                     include $file;
                 }else{
                     // TODO
-                    throw new \Exception("Can not find file: " . $file);
+                    // throw new \Exception("Can not find file: " . $file);
                 }
             }
             break;

@@ -15,10 +15,17 @@ class App
 {
     private static $_instance = null;
 
+    /**
+     * @var \MVCFramework\Config
+     */
+    private $_config = null;
+
     private function __construct(){
         \MVCFramework\Loader::registerNamespace('MVCFramework', dirname(__FILE__.DIRECTORY_SEPARATOR));
         \MVCFramework\Loader::registerAutoLoad();
+        $this->_config = \MVCFramework\Config::getInstance();
     }
+
     /**
      * @return \MVCFramework\App
      */
@@ -31,6 +38,24 @@ class App
     }
 
     public function run(){
+        // if config folder is not set use default one
+        if($this->_config->getConfigFolder() == null){
+            $this->setConfigFolder('../config');
+        }
+    }
 
+    /**
+     * @return \MVCFramework\Config
+     */
+    public function getConfig(){
+        return $this->_config;
+    }
+
+    public function setConfigFolder($path){
+        $this->_config->setConfigFolder($path);
+    }
+
+    public function getConfigFolder(){
+        return $this->_configFolder;
     }
 }

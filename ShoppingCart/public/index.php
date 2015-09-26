@@ -5,12 +5,15 @@ include '../../MVCFramework/App.php';
 
 $app = \MVCFramework\App::getInstance();
 
-$config = \MVCFramework\Config::getInstance();
-$config->setConfigFolder('../config');
-
-
-echo $config->db['name'];
-echo $config->app['test1'];
-
 $app->run();
+
+var_dump($app->getConfig()->app);
+
+// default config folder: config
+// in case developer wants another use:
+// $app->setConfigFolder($path);
+
+// echo $config->app['test1'];
+
+
 
