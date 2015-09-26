@@ -1,0 +1,2 @@
+<?php
+$cnf['name'] = 'yullia';
