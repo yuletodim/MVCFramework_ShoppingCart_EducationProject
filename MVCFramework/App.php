@@ -20,6 +20,11 @@ class App
      */
     private $_config = null;
 
+    /**
+     * @var \MVCFramework\FrontController
+     */
+    private $_frontController = null;
+
     private function __construct(){
         \MVCFramework\Loader::registerNamespace('MVCFramework', dirname(__FILE__.DIRECTORY_SEPARATOR));
         \MVCFramework\Loader::registerAutoLoad();
@@ -42,6 +47,10 @@ class App
         if($this->_config->getConfigFolder() == null){
             $this->setConfigFolder('../config');
         }
+
+        $this->_frontController = \MVCFramework\FrontController::getInstance();
+        // more steps
+        $this->_frontController->dispatch();
     }
 
     /**
