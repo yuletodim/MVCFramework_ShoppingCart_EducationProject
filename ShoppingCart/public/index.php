@@ -7,7 +7,8 @@ $app = \MVCFramework\App::getInstance();
 
 $app->run();
 
-var_dump($app->getConfig()->app);
+// var_dump($app->getConfig()->app);
+
 
 // default config folder: config
 // in case developer wants another use:

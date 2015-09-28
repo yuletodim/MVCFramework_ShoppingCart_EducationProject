@@ -26,13 +26,17 @@ class FrontController
     public function dispatch(){
         $router = new\MVCFramework\Routers\DefaultRouter();
         $_uri = $router->getURI();
-
+        var_dump($_uri);
         $routes = \MVCFramework\App::getInstance()->getConfig()->routes;
 
         if(is_array($routes) && count($routes) > 0){
             foreach($routes as $key => $value){
-                if(stripos($_uri, $key) === 0 && $value['namespace']){
+                if(stripos($_uri, $key) === 0
+                    && ($_uri == $key || stripos($_uri, $key.'/') === 0)
+                    && $value['namespace']){
                     $this->namespace = $value['namespace'];
+                    $_uri = substr($_uri, strlen($key)+1);
+                    $_cacheNamespace = $value;
                     break;
                 }
             }
@@ -42,23 +46,33 @@ class FrontController
 
         if($this->namespace == null && $routes['*']['namespace']){
             $this->namespace = $routes['*']['namespace'];
+            $_cacheNamespace = $routes['*'];
         }else if($this->namespace == null && !$routes['*']['namespace']){
             throw new \Exception('Default route is missing.', 500);
         }
 
-        echo $this->namespace;
-//        $router->parse();
-//
-//        $controller = $router->getController();
-//        if($controller == null){
-//            $controller = $this->getDefaultController();
-//        }
-//
-//        $method = $router->getMethod();
-//        if($method == null){
-//            $method = $this->getDefaultMethod();
-//        }
-//        echo $controller . '<br>'. $method;
+        $_params = explode('/', $_uri);
+
+        if($_params[0]){
+          $this->controller = $_params[0];
+
+           if($_params[1]){
+               $this->method = $_params[1];
+           }else{
+               $this->method = $this->getDefaultMethod();
+           }
+        }else{
+            $this->controller = $this->getDefaultController();
+            $this->method = $this->getDefaultMethod();
+        }
+
+        // check if the controller has different name than the file
+        if(is_array($_cacheNamespace) &&
+            $_cacheNamespace['controllers'] &&
+            $_cacheNamespace['controllers'][$this->controller]){
+            $this->controller = $_cacheNamespace['controllers'][$this->controller];
+        }
+        echo $this->controller;
     }
 
     public function getDefaultController(){
