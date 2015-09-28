@@ -21,7 +21,36 @@ class FrontController
     }
 
     public function dispatch(){
-        $a = new\MVCFramework\Routers\DefaultRouter();
-        $a->parse();
+        $router = new\MVCFramework\Routers\DefaultRouter();
+        $router->parse();
+
+        $controller = $router->getController();
+        if($controller == null){
+            $controller = $this->getDefaultController();
+        }
+
+        $method = $router->getMethod();
+        if($method == null){
+            $method = $this->getDefaultMethod();
+        }
+        echo $controller . '<br>'. $method;
+    }
+
+    public function getDefaultController(){
+        $controller = \MVCFramework\App::getInstance()->getConfig()->app['default_controller'];
+        if($controller){
+            return $controller;
+        }
+
+        return 'Index';
+    }
+
+    public function getDefaultMethod(){
+        $method = \MVCFramework\App::getInstance()->getConfig()->app['default_method'];
+        if($method){
+            return $method;
+        }
+
+        return 'index';
     }
 }
