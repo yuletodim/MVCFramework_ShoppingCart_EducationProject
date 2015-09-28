@@ -21,6 +21,7 @@ class FrontController
     }
 
     public function dispatch(){
-
+        $a = new\MVCFramework\Routers\DefaultRouter();
+        $a->parse();
     }
 }
