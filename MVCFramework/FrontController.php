@@ -4,6 +4,9 @@ namespace MVCFramework;
 class FrontController
 {
     private static $_instance = null;
+    private $namespace = null;
+    private $controller = null;
+    private $method = null;
 
     private function __construct(){
 
@@ -22,18 +25,40 @@ class FrontController
 
     public function dispatch(){
         $router = new\MVCFramework\Routers\DefaultRouter();
-        $router->parse();
+        $_uri = $router->getURI();
 
-        $controller = $router->getController();
-        if($controller == null){
-            $controller = $this->getDefaultController();
+        $routes = \MVCFramework\App::getInstance()->getConfig()->routes;
+
+        if(is_array($routes) && count($routes) > 0){
+            foreach($routes as $key => $value){
+                if(stripos($_uri, $key) === 0 && $value['namespace']){
+                    $this->namespace = $value['namespace'];
+                    break;
+                }
+            }
+        }else{
+            throw new \Exception('Default route is missing.', 500);
         }
 
-        $method = $router->getMethod();
-        if($method == null){
-            $method = $this->getDefaultMethod();
+        if($this->namespace == null && $routes['*']['namespace']){
+            $this->namespace = $routes['*']['namespace'];
+        }else if($this->namespace == null && !$routes['*']['namespace']){
+            throw new \Exception('Default route is missing.', 500);
         }
-        echo $controller . '<br>'. $method;
+
+        echo $this->namespace;
+//        $router->parse();
+//
+//        $controller = $router->getController();
+//        if($controller == null){
+//            $controller = $this->getDefaultController();
+//        }
+//
+//        $method = $router->getMethod();
+//        if($method == null){
+//            $method = $this->getDefaultMethod();
+//        }
+//        echo $controller . '<br>'. $method;
     }
 
     public function getDefaultController(){

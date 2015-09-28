@@ -38,7 +38,7 @@ class Config
             $this->_configFolder = $_configFolder . DIRECTORY_SEPARATOR;
             $namespaces = $this->app['namespaces']; //$ns
             if(is_array($namespaces)){
-                \MVCFramework\Loader::registerNamespace($namespaces);
+                \MVCFramework\Loader::registerNamespaces($namespaces);
             }
         }else{
             throw new \Exception('Config directory read error: ' . $configFolder);
