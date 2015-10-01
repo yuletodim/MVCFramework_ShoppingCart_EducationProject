@@ -9,7 +9,6 @@ class FrontController
     private $method = null;
 
     private function __construct(){
-
     }
 
     /**
@@ -26,8 +25,9 @@ class FrontController
     public function dispatch(){
         $router = new\MVCFramework\Routers\DefaultRouter();
         $_uri = $router->getURI();
-        var_dump($_uri);
+        //var_dump($_uri);
         $routes = \MVCFramework\App::getInstance()->getConfig()->routes;
+        $_cacheNamespace = [];
 
         if(is_array($routes) && count($routes) > 0){
             foreach($routes as $key => $value){
@@ -54,10 +54,10 @@ class FrontController
         $_params = explode('/', $_uri);
 
         if($_params[0]){
-          $this->controller = $_params[0];
+          $this->controller = strtolower($_params[0]);
 
            if($_params[1]){
-               $this->method = $_params[1];
+               $this->method = strtolower($_params[1]);
            }else{
                $this->method = $this->getDefaultMethod();
            }
@@ -68,26 +68,38 @@ class FrontController
 
         // check if the controller has different name than the file
         if(is_array($_cacheNamespace) &&
-            $_cacheNamespace['controllers'] &&
-            $_cacheNamespace['controllers'][$this->controller]){
-            $this->controller = $_cacheNamespace['controllers'][$this->controller];
+                $_cacheNamespace['Controllers'] &&
+                $_cacheNamespace['Controllers'][$this->controller]['to']){
+            if($_cacheNamespace['Controllers'][$this->controller]['methods'][$this->method]){
+                $this->method = strtolower($_cacheNamespace['Controllers'][$this->controller]['methods'][$this->method]);
+            }
+
+            $this->controller = strtolower($_cacheNamespace['Controllers'][$this->controller]['to']);
         }
-        echo $this->controller;
+//        echo $this->namespace .'<br>';
+//        echo $this->controller .'<br>';
+//        echo $this->method .'<br>';
+
+        $fileController = $this->namespace . '\\' . ucfirst($this->controller) . 'Controller';
+        $currentController = new $fileController();
+//        var_dump($currentController);
+        $currentController->{$this->method}();
+
     }
 
     public function getDefaultController(){
         $controller = \MVCFramework\App::getInstance()->getConfig()->app['default_controller'];
         if($controller){
-            return $controller;
+            return strtolower($controller);
         }
 
-        return 'Index';
+        return 'index';
     }
 
     public function getDefaultMethod(){
         $method = \MVCFramework\App::getInstance()->getConfig()->app['default_method'];
         if($method){
-            return $method;
+            return strtolower($method);
         }
 
         return 'index';

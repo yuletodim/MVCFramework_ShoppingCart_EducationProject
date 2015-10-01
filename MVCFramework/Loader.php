@@ -26,20 +26,21 @@ final class Loader
     }
 
     public static function loadClass($class){
+        // echo $class .'<br>';
         foreach(self::$namespaces as $key => $value){
             if(strpos($class, $key) === 0){
-                //echo $key.'<br>'.$value.'<br>'.$class.'<br>';
                 $file = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+                //echo $class .'<br>';
                 $file = substr_replace($file, $value, 0, strlen($key)) . '.php';
                 $file = realpath($file);
                 if($file && is_readable($file)){
                     include $file;
                 }else{
                     // TODO
-                    // throw new \Exception("Can not find file: " . $file);
+                    throw new \Exception("Can not find file: " . $file);
                 }
             }
-            break;
+            //break;
         }
     }
 
@@ -49,6 +50,7 @@ final class Loader
             if(!$path){
                 throw new \Exception('Invalid path.');
             }
+
             $_path = realpath($path);
             if($_path && is_dir($_path) && is_readable($_path)){
                 self::$namespaces[$namespace.'\\'] = $_path.DIRECTORY_SEPARATOR;
@@ -62,9 +64,9 @@ final class Loader
         }
     }
 
-    public static function registerNamespaces($namespace){
-        if(is_array($namespace)){
-            foreach($namespace as $key => $value){
+    public static function registerNamespaces($namespaces_array){
+        if(is_array($namespaces_array)){
+            foreach($namespaces_array as $key => $value){
                 self::registerNamespace($key, $value);
             }
         }else{

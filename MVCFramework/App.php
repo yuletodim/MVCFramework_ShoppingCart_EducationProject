@@ -26,7 +26,7 @@ class App
     private $_frontController = null;
 
     private function __construct(){
-        \MVCFramework\Loader::registerNamespace('MVCFramework', dirname(__FILE__.DIRECTORY_SEPARATOR));
+        \MVCFramework\Loader::registerNamespace('MVCFramework', dirname(__FILE__).DIRECTORY_SEPARATOR);
         \MVCFramework\Loader::registerAutoLoad();
         $this->_config = \MVCFramework\Config::getInstance();
     }
@@ -49,7 +49,6 @@ class App
         }
 
         $this->_frontController = \MVCFramework\FrontController::getInstance();
-        // more steps
         $this->_frontController->dispatch();
     }
 

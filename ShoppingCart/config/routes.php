@@ -1,8 +1,14 @@
 <?php
+// A way to define a namespace
+$config['admin']['namespace'] = 'Controllers\Admin';
+
+// A way to override a controller
+$config['admin']['controllers']['index']['to'] = 'create';
+//A way to override a method
+$config['admin']['controllers']['index']['methods']['new'] = '_new';
+
+$config['admin']['controllers']['new']['to'] = 'test';
+
+// The most common case is last
 $config['*']['namespace'] = 'Controllers';
-
-$config['admin']['namespace'] = 'Controllers/Admin';
-$config['admin']['controllers']['index'] = 'Create';
-$config['admin']['controllers']['new'] = 'Test';
-
 return $config;

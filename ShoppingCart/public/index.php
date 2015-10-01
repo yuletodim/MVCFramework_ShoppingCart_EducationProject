@@ -4,17 +4,26 @@ error_reporting(E_ALL ^ E_NOTICE);
 include '../../MVCFramework/App.php';
 
 $app = \MVCFramework\App::getInstance();
-
-$app->run();
-
-// var_dump($app->getConfig()->app);
-
-
 // default config folder: config
 // in case developer wants another use:
 // $app->setConfigFolder($path);
+\MVCFramework\Loader::registerNamespace('Test\Models',
+    'C:/xampp/htdocs/WebDevelopmentBasics/MVCFramework_ShoppingCart_EducationProject/trunk/ShoppingCart/Models');
+$app->run();
 
-// echo $config->app['test1'];
+
+
+new Test\Models\User();
+$n = \MVCFramework\Loader::getNamespaces();
+echo '<br>';
+foreach($n as $k => $v){
+    echo $k.'=>'.$v .'<br>';
+}
+
+//var_dump($app->getConfig()->routes);
+
+
+
 
 
 
