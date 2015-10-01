@@ -1,7 +1,7 @@
 <?php
 namespace Controllers\Admin;
 
-class IndexController{
+class Index2Controller{
     public function index(){
         echo 'i tova raboti';
     }

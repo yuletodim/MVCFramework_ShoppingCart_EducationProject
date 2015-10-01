@@ -5,10 +5,14 @@ include '../../MVCFramework/App.php';
 
 $app = \MVCFramework\App::getInstance();
 // default config folder: config
-// in case developer wants another use:
+// set custom config folder:
 // $app->setConfigFolder($path);
+
 \MVCFramework\Loader::registerNamespace('Test\Models',
     'C:/xampp/htdocs/WebDevelopmentBasics/MVCFramework_ShoppingCart_EducationProject/trunk/ShoppingCart/Models');
+
+// set custom router:
+// $app->setRouter('RPCRouter');
 $app->run();
 
 

@@ -3,7 +3,7 @@
 $config['admin']['namespace'] = 'Controllers\Admin';
 
 // A way to override a controller
-$config['admin']['controllers']['index']['to'] = 'create';
+$config['admin']['controllers']['index']['to'] = 'index2';
 //A way to override a method
 $config['admin']['controllers']['index']['methods']['new'] = '_new';
 

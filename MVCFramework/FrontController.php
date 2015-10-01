@@ -4,6 +4,7 @@ namespace MVCFramework;
 class FrontController
 {
     private static $_instance = null;
+    private $router = null;
     private $namespace = null;
     private $controller = null;
     private $method = null;
@@ -11,6 +12,13 @@ class FrontController
     private function __construct(){
     }
 
+    public function getRouter(){
+        return $this->router;
+    }
+
+    public function setRouter(\MVCFramework\Routers\DefaultRouter $router){
+        $this->router = $router;
+    }
     /**
      * @return \MVCFramework\FrontController
      */
@@ -23,8 +31,10 @@ class FrontController
     }
 
     public function dispatch(){
-        $router = new\MVCFramework\Routers\DefaultRouter();
-        $_uri = $router->getURI();
+        if($this->router == null){
+            throw new \Exception('No valid router found.', 500);
+        }
+        $_uri = $this->router->getURI();
         //var_dump($_uri);
         $routes = \MVCFramework\App::getInstance()->getConfig()->routes;
         $_cacheNamespace = [];
@@ -68,13 +78,13 @@ class FrontController
 
         // check if the controller has different name than the file
         if(is_array($_cacheNamespace) &&
-                $_cacheNamespace['Controllers'] &&
-                $_cacheNamespace['Controllers'][$this->controller]['to']){
-            if($_cacheNamespace['Controllers'][$this->controller]['methods'][$this->method]){
+                $_cacheNamespace['controllers'] &&
+                $_cacheNamespace['controllers'][$this->controller]['to']){
+            if($_cacheNamespace['controllers'][$this->controller]['methods'][$this->method]){
                 $this->method = strtolower($_cacheNamespace['Controllers'][$this->controller]['methods'][$this->method]);
             }
 
-            $this->controller = strtolower($_cacheNamespace['Controllers'][$this->controller]['to']);
+            $this->controller = strtolower($_cacheNamespace['controllers'][$this->controller]['to']);
         }
 //        echo $this->namespace .'<br>';
 //        echo $this->controller .'<br>';

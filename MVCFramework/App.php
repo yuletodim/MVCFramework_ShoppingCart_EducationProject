@@ -24,11 +24,22 @@ class App
      * @var \MVCFramework\FrontController
      */
     private $_frontController = null;
+    private $router;
 
     private function __construct(){
         \MVCFramework\Loader::registerNamespace('MVCFramework', dirname(__FILE__).DIRECTORY_SEPARATOR);
         \MVCFramework\Loader::registerAutoLoad();
         $this->_config = \MVCFramework\Config::getInstance();
+    }
+
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
+    public function setRouter($router)
+    {
+        $this->router = $router;
     }
 
     /**
@@ -49,6 +60,16 @@ class App
         }
 
         $this->_frontController = \MVCFramework\FrontController::getInstance();
+
+        if($this->router instanceof \MVCFramework\Routers\IRouter){
+            $this->_frontController->setRouter($this->router);
+        } else if($this->router == 'JsonRPCRouter'){
+            // TODO: implement JsonRPCRouter
+        } else if($this->router == 'CLIRouter'){
+            // TODO: implement JsonRPCRouter
+        } else {
+            $this->_frontController->setRouter(new \MVCFramework\Routers\DefaultRouter());
+        }
         $this->_frontController->dispatch();
     }
 
