@@ -13,7 +13,10 @@ $app = \MVCFramework\App::getInstance();
 
 // set custom router:
 // $app->setRouter('RPCRouter');
+
+
 $app->run();
+var_dump($app->getConnection('default'));
 
 
 

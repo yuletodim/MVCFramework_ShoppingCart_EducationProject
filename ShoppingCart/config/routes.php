@@ -11,4 +11,5 @@ $config['admin']['controllers']['new']['to'] = 'test';
 
 // The most common case is last
 $config['*']['namespace'] = 'Controllers';
+
 return $config;

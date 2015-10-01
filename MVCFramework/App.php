@@ -25,6 +25,7 @@ class App
      */
     private $_frontController = null;
     private $router;
+    private $_dbConnections = array();
 
     private function __construct(){
         \MVCFramework\Loader::registerNamespace('MVCFramework', dirname(__FILE__).DIRECTORY_SEPARATOR);
@@ -71,6 +72,31 @@ class App
             $this->_frontController->setRouter(new \MVCFramework\Routers\DefaultRouter());
         }
         $this->_frontController->dispatch();
+    }
+
+    public function getConnection($connection = 'default'){
+        if(!$connection){
+            throw new \Exception('No valid connection provider.', 500);
+        }
+
+        if($this->_dbConnections[$connection]){
+            return $this->_dbConnections[$connection];
+        }
+
+        $config = $this->getConfig()->database;
+        if(!$config[$connection]){
+            throw new \Exception('No valid connection provider.', 500);
+        }
+
+        $dsn = $config[$connection]['connection_url'];
+        $user = $config[$connection]['username'];
+        $pass = $config[$connection]['password'];
+        $options = $config[$connection]['pdo_options'];
+
+        $pdo = new \PDO($dsn, $user, $pass, $options);
+        $this->_dbConnections[$connection] = $pdo;
+
+        return $this->_dbConnections[$connection];
     }
 
     /**

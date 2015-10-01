@@ -34,9 +34,11 @@ class FrontController
         if($this->router == null){
             throw new \Exception('No valid router found.', 500);
         }
+        
         $_uri = $this->router->getURI();
         //var_dump($_uri);
         $routes = \MVCFramework\App::getInstance()->getConfig()->routes;
+
         $_cacheNamespace = [];
 
         if(is_array($routes) && count($routes) > 0){
