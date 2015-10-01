@@ -74,7 +74,7 @@ class App
         $this->_frontController->dispatch();
     }
 
-    public function getConnection($connection = 'default'){
+    public function getDBConnection($connection = 'default'){
         if(!$connection){
             throw new \Exception('No valid connection provider.', 500);
         }
