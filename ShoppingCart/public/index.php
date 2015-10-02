@@ -14,19 +14,28 @@ $app = \MVCFramework\App::getInstance();
 // set custom router:
 // $app->setRouter('RPCRouter');
 
-
 $app->run();
-var_dump($app->getConnection('default'));
 
-
-
-new Test\Models\User();
-$n = \MVCFramework\Loader::getNamespaces();
-echo '<br>';
-foreach($n as $k => $v){
-    echo $k.'=>'.$v .'<br>';
-}
-
+$app->getSession()->counter+=1;
+echo $app->getSession()->counter;
+//
+//var_dump($app->getDBConnection('default'));
+//$db = new \MVCFramework\DB\SimpleDB();
+//$a = $db->prepare('SELECT * FROM users');
+//$a->execute();
+//print_r($a->fetchAllAssoc());
+//$b = $db->prepare("SELECT * FROM users WHERE id = ?");
+//$b->execute([1]);
+//print_r($b->fetchRowAssoc());
+//
+//
+// new Test\Models\User();
+//$n = \MVCFramework\Loader::getNamespaces();
+//echo '<br>';
+//foreach($n as $k => $v){
+//    echo $k.'=>'.$v .'<br>';
+//}
+//
 //var_dump($app->getConfig()->routes);
 
 
