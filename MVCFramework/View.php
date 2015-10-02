@@ -4,14 +4,16 @@ namespace MVCFramework;
 class View
 {
     private static $_instance = null;
-    private $viewPath = null;
-    private $viewDir = null;
-    private $data = array();
+    private $___viewPath = null;
+    private $___viewDir = null;
+    private $___data = array();
+    private $___layoutParts = array();
+    private $___layoutData = array();
 
     private function __construct(){
-        $this->viewPath = \MVCFramework\App::getInstance()->getConfig()->app['views_dir'];
-        if($this->viewPath == null){
-            $this->viewPath = realpath('../views/');
+        $this->___viewPath = \MVCFramework\App::getInstance()->getConfig()->app['views_dir'];
+        if($this->___viewPath == null){
+            $this->___viewPath = realpath('../views/');
         }
     }
 
@@ -27,11 +29,11 @@ class View
     }
 
     public function __set($name, $value){
-        $this->data[$name] = $value;
+        $this->___data[$name] = $value;
     }
 
     public function __get($name){
-        return $this->data[$name];
+        return $this->___data[$name];
     }
 
     public function setViewDirectory($path){
@@ -39,7 +41,7 @@ class View
         if($path){
             $path = realpath($path) . DIRECTORY_SEPARATOR;
             if(is_dir($path) && is_readable($path)){
-                $this->viewDir = $path;
+                $this->___viewDir = $path;
             } else {
                 throw new \Exception('Invalid path for view directory.', 500);
             }
@@ -50,7 +52,16 @@ class View
 
     public function display($name, $data = array(), $returnAsString = false){
         if(is_array($data)){
-            $this->data = array_merge($this->data, $data);
+            $this->___data = array_merge($this->___data, $data);
+        }
+
+        if(count($this->___layoutParts) > 0){
+            foreach($this->___layoutParts as $key => $value){
+                $part = $this->_includeFile($value);
+                if($part){
+                    $this->___layoutData[$key] = $part;
+                }
+            }
         }
 
         if($returnAsString){
@@ -60,19 +71,31 @@ class View
         }
     }
 
+    public function getLayoutData($name){
+        return $this->___layoutData[$name];
+    }
+
+    public function appendToLayout($key, $template){
+        if($key && $template){
+            $this->___layoutParts[$key] = $template;
+        } else {
+            throw new \Exception('Layout requires valid key and template.', 500);
+        }
+    }
+
     private function _includeFile($file){
-        if($this->viewDir == null){
-            $this->setViewDirectory($this->viewPath);
+        if($this->___viewDir == null){
+            $this->setViewDirectory($this->___viewPath);
         }
 
-        $fileName = str_replace('.', DIRECTORY_SEPARATOR, $file);
-        $filePath = $this->viewDir . $fileName . '.php';
-        if(file_exists($filePath) && is_readable($filePath)){
+        $___fileName = str_replace('.', DIRECTORY_SEPARATOR, $file);
+        $___filePath = $this->___viewDir . $___fileName . '.php';
+        if(file_exists($___filePath) && is_readable($___filePath)){
             ob_start();
-            include $filePath;
+            include $___filePath;
             return ob_get_clean();
         }else{
-            throw new \Exception('View ' . $file . 'can not be included.', 500);
+            throw new \Exception('View ' . $file . ' can not be included.', 500);
         }
     }
 }
