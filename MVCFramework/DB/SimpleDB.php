@@ -25,7 +25,6 @@ class SimpleDB
         } else{
             $this->db = \MVCFramework\App::getInstance()->getDBConnection($this->connection);
         }
-
     }
 
     /**

@@ -100,6 +100,21 @@ class App
 
                 $this->setSession($_session);
             }
+            else if($_sess['type'] == 'database'){
+                $_session = new \MVCFramework\Sessions\DBSession(
+                    $_sess['db_connection'],
+                    $_sess['name'],
+                    $_sess['db_table'],
+                    $_sess['lifetime'],
+                    $_sess['path'],
+                    $_sess['domain'],
+                    $_sess['secure']
+                );
+
+                $this->setSession($_session);
+            } else {
+                throw new \Exception('No valid session.', 500);
+            }
         }
 
         $this->_frontController = \MVCFramework\FrontController::getInstance();
@@ -140,5 +155,11 @@ class App
         $this->_dbConnections[$connection] = $pdo;
 
         return $this->_dbConnections[$connection];
+    }
+
+    public function __destruct(){
+        if($this->_session != null){
+            $this->_session->saveSession();
+        }
     }
 }
