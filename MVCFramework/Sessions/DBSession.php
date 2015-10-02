@@ -42,7 +42,6 @@ class DBSession extends \MVCFramework\DB\SimpleDB implements \MVCFramework\Sessi
 
     private function _isSessionValid(){
         if($this->sessionId){
-            echo 'I: '.$this->sessionId.'<br>';
             $stmt = $this->prepare('SELECT * FROM ' . $this->tableName .
                 ' WHERE sess_id = ? AND valid_until <= ?');
             $result = $stmt->execute(

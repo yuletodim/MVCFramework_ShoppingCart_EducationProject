@@ -16,8 +16,8 @@ $app = \MVCFramework\App::getInstance();
 
 $app->run();
 
-$app->getSession()->counter+=1;
-echo $app->getSession()->counter;
+//$app->getSession()->counter+=1;
+//echo $app->getSession()->counter;
 //
 //var_dump($app->getDBConnection('default'));
 //$db = new \MVCFramework\DB\SimpleDB();
