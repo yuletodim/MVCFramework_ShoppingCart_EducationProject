@@ -36,7 +36,7 @@ class InputData
         return array_key_exists($name, $this->_cookies);
     }
 
-    public function takeGet($position, $normalize = null, $defaultValue = null){
+    public function getGet($position, $normalize = null, $defaultValue = null){
         if($this->hasGetValue($position)){
             if($normalize != null){
                 return \MVCFramework\Utilities::normalize($this->_get[$position], $normalize);
@@ -48,7 +48,7 @@ class InputData
         return $defaultValue;
     }
 
-    public function takePost($name, $normalize = null, $defaultValue = null){
+    public function getPost($name, $normalize = null, $defaultValue = null){
         if($this->hasPostValue($name)){
             if($normalize != null){
                 return \MVCFramework\Utilities::normalize($this->_post[$name], $normalize);

@@ -10,4 +10,7 @@ class DefaultRouter implements \MVCFramework\Routers\IRouter
         return $uri;
     }
 
+    public function getPost(){
+        return $_POST;
+    }
 }

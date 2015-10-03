@@ -4,6 +4,9 @@ namespace MVCFramework;
 class FrontController
 {
     private static $_instance = null;
+    /**
+     * @var \MVCFramework\Routers\IRouter
+     */
     private $router = null;
     private $namespace = null;
     private $controller = null;
@@ -65,11 +68,17 @@ class FrontController
 
         $_params = explode('/', $_uri);
 
+        $input = \MVCFramework\InputData::getInstance();
+
         if($_params[0]){
           $this->controller = strtolower($_params[0]);
 
            if($_params[1]){
                $this->method = strtolower($_params[1]);
+
+               unset($_params[0], $_params[1]);
+               $getParams = array_values($_params);
+               $input->setGet($getParams);
            }else{
                $this->method = $this->getDefaultMethod();
            }
@@ -92,6 +101,9 @@ class FrontController
 //        echo $this->controller .'<br>';
 //        echo $this->method .'<br>';
 
+
+        $input->setPost($this->router->getPost());
+
         $fileController = $this->namespace . '\\' . ucfirst($this->controller) . 'Controller';
         $currentController = new $fileController();
 //        var_dump($currentController);
@@ -105,7 +117,7 @@ class FrontController
             return strtolower($controller);
         }
 
-        return 'index';
+        return 'home';
     }
 
     public function getDefaultMethod(){
@@ -114,6 +126,6 @@ class FrontController
             return strtolower($method);
         }
 
-        return 'index';
+        return 'home';
     }
 }

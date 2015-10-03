@@ -30,6 +30,9 @@ class Utilities
                     case 'xss':
                         $data = self::xss_clean($data);
                         break;
+                    case 'hash':
+                        $data = password_hash($data, PASSWORD_DEFAULT);
+                        break;
                 }
             }
         }
